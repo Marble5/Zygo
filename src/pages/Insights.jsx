@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -7,6 +7,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   PieChart, Pie, Cell, ResponsiveContainer
 } from 'recharts';
+import { Plus } from 'lucide-react'; // Optional icon
 
 // Sample data for bar chart (vertical)
 const barData = [
@@ -21,13 +22,39 @@ const pieData = [
   { name: 'In Progress', value: 10 },
   { name: 'Completed', value: 15 }
 ];
-const COLORS = ['#3B82F6', '#10B981', '#F59E0B']; // Tailwind blue-500, green-500, amber-500
+const COLORS = ['#3B82F6', '#10B981', '#F59E0B'];
 
 const Insights = () => {
   const theme = useTheme();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
   return (
-    <div>
-      <Grid container spacing={2}>
+    <div className="relative">
+      {/* Floating + Button */}
+      <button
+        onClick={toggleSidebar}
+        className="absolute top-4 right-4 z-50 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600"
+      >
+        <Plus />
+      </button>
+
+      {/* Sidebar */}
+      {sidebarOpen && (
+        <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-40 p-4 border-l border-gray-200">
+          <h2 className="text-lg font-semibold mb-4">Select Chart Type</h2>
+          <ul className="space-y-2">
+            <li className="cursor-pointer hover:underline">📊 Bar Chart</li>
+            <li className="cursor-pointer hover:underline">🥧 Pie Chart</li>
+            <li className="cursor-pointer hover:underline">📈 Line Chart</li>
+            <li className="cursor-pointer hover:underline">📉 Area Chart</li>
+            <li className="cursor-pointer hover:underline">🧮 Radar Chart</li>
+          </ul>
+        </div>
+      )}
+
+      <Grid container spacing={2} className="mt-12">
         {/* Vertical Bar Chart */}
         <Grid item xs={12} md={6}>
           <Paper className="p-4">
@@ -43,6 +70,7 @@ const Insights = () => {
             </ResponsiveContainer>
           </Paper>
         </Grid>
+
         {/* Pie Chart */}
         <Grid item xs={12} md={6}>
           <Paper className="p-4">
